@@ -631,3 +631,9 @@ input[type=submit].twitter:after {
   text-align: center;
   font-size: 3rem;
 }
+
+
+.not-found {
+  width: 100%;
+  text-align: center
+}
