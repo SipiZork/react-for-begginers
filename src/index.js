@@ -18,7 +18,7 @@ const Root = () => {
           <Route exact path="/store/:storeId">
             <App />
           </Route>
-          <Route path="*">
+          <Route>
             <NotFound />
           </Route>
         </Switch>

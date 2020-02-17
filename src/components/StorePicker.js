@@ -1,18 +1,16 @@
 import React from 'react';
-import { getFunName } from '../helpers'
+import { getFunName } from '../helpers';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
 class StorePicker extends React.Component {
-  constructor(props){
-    super(props);
-    //this.goToStore = this.goToStore.bind(this);
-  }
 
   goToStore(event){
     event.preventDefault();
-    console.log('You changed the URL');
-    // first grab the text from the boy
-    console.log(this.storeInput.value);
+    const storeId = this.storeInput.value;
+    // first grab the text from the box
     // second we're going to transition from / to /store/:storeId
+    this.props.history.push(`store/${storeId}`);
   }
 
   render(){
@@ -26,4 +24,8 @@ class StorePicker extends React.Component {
   }
 }
 
-export default StorePicker;
+StorePicker.contextTypes = {
+  router: PropTypes.object
+}
+
+export default withRouter(StorePicker);
