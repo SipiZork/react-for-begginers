@@ -15,7 +15,7 @@ const Root = () => {
           <Route exact path="/">
             <StorePicker />
           </Route>
-          <Route exact path="/store/:storeID">
+          <Route exact path="/store/:storeId">
             <App />
           </Route>
           <Route path="*">
