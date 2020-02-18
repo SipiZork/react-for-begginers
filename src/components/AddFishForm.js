@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 
 class AddFishForm extends React.Component {
   createFish(event) {
@@ -13,7 +13,6 @@ class AddFishForm extends React.Component {
     }
     this.props.addFish(fish);
     this.fishFrom.reset();
-    console.log(fish);
   }
 
   render() {
