@@ -21,15 +21,24 @@ class App extends React.Component {
     }
   }
 
-  UNSAFE_componentWillMount(){
-    this.ref = base.syncState(`${this.props.match.params.storeId}/fishes`,
+  componentDidMount(){
+    const { params } = this.props.match;
+    const localStorageRef = localStorage.getItem(params.storeId);
+    if(localStorageRef) {
+      this.setState({ order: JSON.parse(localStorageRef)});
+    }
+    this.ref = base.syncState(`${params.storeId}/fishes`,
       {
         context: this,
         state: 'fishes'
       });
   }
-  
-  UNSAFE_componentWillUnmount() {
+
+  componentDidUpdate() {
+    localStorage.setItem(this.props.match.params.storeId, JSON.stringify(this.state.order));
+  }
+
+  componentWillUnmount() {
     base.removeBinding(this.ref);
   }
 
@@ -64,7 +73,7 @@ class App extends React.Component {
             {Object.keys(this.state.fishes).map(key => <Fish key={key} index={key} details={this.state.fishes[key]} addToOrder={this.addToOrder} />)}
           </ul>
         </div>
-        <Order fishes={this.state.fishes} order={this.state.order} />
+        <Order fishes={this.state.fishes} order={this.state.order} params={this.props.match.params}/>
         <Inventory addFish={this.addFish} loadSamples={this.loadSamples}/>
       </div>
     );
