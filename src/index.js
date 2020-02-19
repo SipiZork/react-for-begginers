@@ -12,15 +12,9 @@ const Root = () => {
 
       <Router>
         <Switch>
-          <Route exact path="/">
-            <StorePicker />
-          </Route>
-          <Route exact path="/store/:storeId">
-            <App />
-          </Route>
-          <Route>
-            <NotFound />
-          </Route>
+          <Route exact path="/" component={StorePicker} />
+          <Route path="/store/:storeId" component={App} />
+          <Route component={NotFound} />
         </Switch>
       </Router>
   )
