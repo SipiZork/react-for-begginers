@@ -4,6 +4,7 @@ import Order from './Order';
 import Inventory from './Inventory';
 import Fish from './Fish';
 import simpleFishes from '../sample-fishes';
+import PropTypes from 'prop-types';
 import { base } from '../base';
 
 
@@ -79,7 +80,6 @@ class App extends React.Component {
     const order = { ...this.state.order };
     order[key] = order[key] + 1 || 1;
     this.setState({ order });
-    this.state.lastClick = key;
   }
 
   removeFromOrder(key) {
@@ -92,7 +92,7 @@ class App extends React.Component {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
-          <Header tagline="Fresh Seafood Market"/>
+          <Header tagline="Fresh seafood market" />
           <ul className="list-of-fishes">
             {Object.keys(this.state.fishes).map
               (
@@ -121,6 +121,10 @@ class App extends React.Component {
         </div>
     );
   }
+}
+
+App.propTypes = {
+  match: PropTypes.object.isRequired
 }
 
 export default App;

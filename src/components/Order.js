@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatPrice } from '../helpers'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import PropTypes from 'prop-types';
 
 class Order extends React.Component {
   constructor() {
@@ -18,7 +19,7 @@ class Order extends React.Component {
     }
 
     return (
-      <CSSTransition key={key} timeout={{enter:300, exit:300}} unmountOnExit appear classNames="item item">
+      <CSSTransition key={key} timeout={300} unmountOnExit appear classNames="item item">
         <li key={key}>
           <span className={this.props.classes}>{count}lbs {fish.name} {removeButton} </span>
           <span className="price">{formatPrice(count * fish.price)}</span>
@@ -52,6 +53,12 @@ class Order extends React.Component {
       </div>
         );
   }
+}
+
+Order.propTypes = {
+  fishes: PropTypes.object.isRequired,
+  order: PropTypes.object.isRequired,
+  removeFromOrder: PropTypes.func.isRequired
 }
 
 export default Order;
