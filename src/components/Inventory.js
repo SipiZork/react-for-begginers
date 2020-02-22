@@ -1,56 +1,103 @@
-import React from 'react';
-import AddFishForm from './AddFishForm';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
+import firebase from "firebase";
+import AddFishForm from "./AddFishForm";
+import EditFishForm from "./EditFishForm";
+import Login from "./Login";
+import base, { firebaseApp } from "../base";
 
 class Inventory extends React.Component {
-  constructor(props){
-    super(props);
+  static propTypes = {
+    fishes: PropTypes.object,
+    updateFish: PropTypes.func,
+    deleteFish: PropTypes.func,
+    loadSampleFishes: PropTypes.func,
+    addFish: PropTypes.func
+  };
 
-    this.renderInventory = this.renderInventory.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+  state = {
+    uid: null,
+    owner: null
+  };
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.authHandler({ user });
+      }
+    });
   }
 
-  handleChange(e, key) {
-    const fish = this.props.fishes[key];
-    const updatedFish = { ...fish, [e.target.name]: e.target.value };
-    this.props.updateFish(key, updatedFish);
-  }
+  authHandler = async authData => {
+    // 1 .Look up the current store in the firebase database
+    const store = await base.fetch(this.props.storeId, { context: this });
+    // 2. Claim it if there is no owner
+    if (!store.owner) {
+      // save it as our own
+      await base.post(`${this.props.storeId}/owner`, {
+        data: authData.user.uid
+      });
+    }
+    // 3. Set the state of the inventory component to reflect the current user
+    this.setState({
+      uid: authData.user.uid,
+      owner: store.owner || authData.user.uid
+    });
+  };
 
-  renderInventory(key) {
-    const fish  = this.props.fishes[key];
-    return (
-      <div className="fish-edit" key={key}>
-        <input type="text" name="name" placeholder="Fish name" value={fish.name} onChange={(e) => this.handleChange(e, key)} />
-        <input type="text" name="price" placeholder="Fish Price" value={fish.price} onChange={(e) => this.handleChange(e, key)} />
-        <select type="text" name="status" placeholder="Fish status" value={fish.status} onChange={(e) => this.handleChange(e, key)}>
-          <option value="available">Fresh!</option>
-          <option value="unavailable">Sold Out!</option>
-        </select>
-        <textarea type="text" name="desc" placeholder="Fish Desc" value={fish.desc} onChange={(e) => this.handleChange(e, key)}></textarea>
-        <input type="text"  name="image" placeholder="Fish Image" value={fish.image} onChange={(e) => this.handleChange(e, key)} />
-        <button onClick={() => this.props.removeFish(key)}>Remove Fish</button>
-      </div>
-    )
-  }
+  authenticate = provider => {
+    const authProvider = new firebase.auth[`${provider}AuthProvider`]();
+    firebaseApp
+      .auth()
+      .signInWithPopup(authProvider)
+      .then(this.authHandler);
+  };
+
+  logout = async () => {
+    console.log("Logging out!");
+    await firebase.auth().signOut();
+    this.setState({ uid: null });
+  };
 
   render() {
+    const logout = <button onClick={this.logout}>Log Out!</button>;
+
+    // 1. Check if they are logged in
+    if (!this.state.uid) {
+      return <Login authenticate={this.authenticate} />;
+    }
+
+    // 2. check if they are not the owner of the store
+    if (this.state.uid !== this.state.owner) {
+      return (
+        <div>
+          <p>Sorry you are not the owner!</p>
+          {logout}
+        </div>
+      );
+    }
+
+    // 3. They must be the owner, just render the inventory
     return (
-      <div>
+      <div className="inventory">
         <h2>Inventory</h2>
-        {Object.keys(this.props.fishes).map(this.renderInventory)}
+        {logout}
+        {Object.keys(this.props.fishes).map(key => (
+          <EditFishForm
+            key={key}
+            index={key}
+            fish={this.props.fishes[key]}
+            updateFish={this.props.updateFish}
+            deleteFish={this.props.deleteFish}
+          />
+        ))}
         <AddFishForm addFish={this.props.addFish} />
-        <button onClick={this.props.loadSamples}>Load Sample Fishes</button>
+        <button onClick={this.props.loadSampleFishes}>
+          Load Sample Fishes
+        </button>
       </div>
     );
   }
-}
-
-Inventory.propTypes = {
-  fishes: PropTypes.object.isRequired,
-  updateFish: PropTypes.func.isRequired,
-  addFish: PropTypes.func.isRequired,
-  removeFish: PropTypes.func.isRequired,
-  loadSamples: PropTypes.func.isRequired
 }
 
 export default Inventory;
