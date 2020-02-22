@@ -20,7 +20,8 @@ class App extends React.Component {
     // getinitialState
     this.state = {
       fishes: {},
-      order: {}
+      order: {},
+      lastClick: null
     }
   }
 
@@ -38,7 +39,7 @@ class App extends React.Component {
     );
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
     localStorage.setItem(this.props.match.params.storeId, JSON.stringify(this.state.order));
   }
 
@@ -78,6 +79,7 @@ class App extends React.Component {
     const order = { ...this.state.order };
     order[key] = order[key] + 1 || 1;
     this.setState({ order });
+    this.state.lastClick = key;
   }
 
   removeFromOrder(key) {
@@ -108,7 +110,8 @@ class App extends React.Component {
           fishes={this.state.fishes}
           order={this.state.order}
           params={this.props.match.params}
-          removeFromOrder={this.removeFromOrder} />
+          removeFromOrder={this.removeFromOrder}
+          lastClick={this.state.lastClick} />
         <Inventory
           addFish={this.addFish}
           updateFish={this.updateFish}

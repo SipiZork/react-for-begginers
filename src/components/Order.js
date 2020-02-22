@@ -1,10 +1,10 @@
 import React from 'react';
 import { formatPrice } from '../helpers'
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 class Order extends React.Component {
   constructor() {
     super();
-
     this.renderOrder = this.renderOrder.bind(this);
   }
 
@@ -18,10 +18,12 @@ class Order extends React.Component {
     }
 
     return (
-      <li key={key}>
-        <span>{count}lbs {fish.name} {removeButton} </span>
-        <span className="price">{formatPrice(count * fish.price)}</span>
-      </li>
+      <CSSTransition key={key} timeout={{enter:300, exit:300}} unmountOnExit appear classNames="item item">
+        <li key={key}>
+          <span className={this.props.classes}>{count}lbs {fish.name} {removeButton} </span>
+          <span className="price">{formatPrice(count * fish.price)}</span>
+        </li>
+      </CSSTransition>
     )
   }
 
@@ -39,15 +41,16 @@ class Order extends React.Component {
     return (
       <div className="order-wrap">
         <h2>Your Order</h2>
-        <ul className="order">
+
+        <TransitionGroup className="order" component="ul">
           {orderIds.map(this.renderOrder)}
           <li className="total">
             <strong>Total:</strong>
             {formatPrice(total)}
           </li>
-        </ul>
+        </TransitionGroup>
       </div>
-    );
+        );
   }
 }
 

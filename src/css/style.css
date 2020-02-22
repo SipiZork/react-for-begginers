@@ -386,6 +386,42 @@ ul {
   margin: 0;
   padding: 0;
 }
+
+.item {
+  transition: all 0.3s ease-in-out;
+  max-height: 0px;
+  transform: translateX(-120%);
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.item-enter-active {
+  transform: translateX(0);
+  max-height: 60px;
+  padding: 2rem 0 !important;
+
+}
+
+.item-enter-done {
+  max-height: 60px;
+  padding: 2rem 0 !important;
+  transform: translateX(0);
+}
+
+.item-exit {
+  max-height: 0px;
+  padding: 0 !important;
+  transform: translateX(0);
+}
+
+.item-exit-active {
+  transform: translateX(120%);
+}
+
+.order-wrap {
+  overflow-x: hidden; 
+}
+
 ul.order li {
   border-bottom: 1px solid #000;
   padding: 2rem 0;
