@@ -517,6 +517,39 @@ ul.order li span.count span {
   -webkit-transform: translateZ(0);
           transform: translateZ(0);
 }
+
+.menu, .order-wrap, .inventory, .login {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+.menu::-webkit-scrollbar {
+  width: 0px;
+}
+
+.order-wrap::-webkit-scrollbar {
+  width: 0px;
+}
+
+.inventory::-webkit-scrollbar {
+  width: 0px;
+}
+
+.login::-webkit-scrollbar {
+  width: 0px;
+}
+
+
+
+.menu-inner {
+  overflow: scroll;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  padding-right: 300px;
+}
+
 .menu-fish {
   border-bottom: 2px solid #000;
   border-top: 1px solid #000;
