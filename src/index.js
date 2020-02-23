@@ -10,7 +10,7 @@ import NotFound from './components/NotFound';
 const Root = () => {
   return(
 
-      <Router >
+      <Router>
         <Switch>
           <Route exact path="/" component={StorePicker} />
           <Route path="/store/:storeId" component={App} />
