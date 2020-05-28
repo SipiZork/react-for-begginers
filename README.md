@@ -8,6 +8,6 @@ Simple page market application, which allows us to edit the store as admin and s
  - React
 
 ### Live version
-[Catch of the day](https://react.sipoarmark.com)
+[Catch of the day](https://react.siposmark.com)
 #### based on the following tutorial
 [Wes Bos](https://reactforbeginners.com)
